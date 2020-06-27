@@ -70,7 +70,6 @@ import config.cfg
 excelCase = public_func.readExcel.getExeclTestCaseList()
 @ddt.ddt()
 class testApiData(unittest.TestCase):
-
 	@ddt.data(*excelCase)
 	def test_case_001(self, itme):
 		'''测试数据: {0}'''
