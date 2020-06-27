@@ -33,6 +33,6 @@ class testApiData(unittest.TestCase):
 if __name__=="__main__":
 	cases = unittest.TestLoader().loadTestsFromTestCase(testApiData)
 
-	with open(os.getcwd()+config.cfg.report_path, 'wb') as f:
+	with open(config.cfg.report_path, 'wb') as f:
 		runner = public_func.HTMLTestRunner.HTMLTestRunner(stream=f, verbosity=2, title="接口测试测试报告", description="测试案例执行结果")
 		runner.run(cases)
