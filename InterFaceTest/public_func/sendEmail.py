@@ -47,6 +47,6 @@ def send_mail(username=cfg.email['username'], passwd=cfg.email['passwd'], recv=c
 
 
 if __name__ == "__main__":
-    send_mail(username='xiemulin0104@163.com', passwd='VACFIMDCJBTYRKPY', recv='xiemulin0104@163.com',
+    send_mail(username='xxxxxx@163.com', passwd='xxxxxx', recv='xxxxxxx@163.com',
               title='测试邮件标题', content='测试邮件正文')
     print('send mail success!')
