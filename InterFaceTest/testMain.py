@@ -7,12 +7,14 @@
 # *******************************************#
 import unittest
 import ddt
-import os
 import public_func.useApi
 import public_func.log
 import public_func.readExcel
 import public_func.HTMLTestRunner
+import public_func.sendEmail
 import config.cfg
+
+
 excelCase = public_func.readExcel.getExeclTestCaseList()
 @ddt.ddt()
 class testApiData(unittest.TestCase):
@@ -32,7 +34,8 @@ class testApiData(unittest.TestCase):
 
 if __name__=="__main__":
 	cases = unittest.TestLoader().loadTestsFromTestCase(testApiData)
-
-	with open(config.cfg.report_path, 'wb') as f:
+	report = config.cfg.report_path
+	with open(report, 'wb') as f:
 		runner = public_func.HTMLTestRunner.HTMLTestRunner(stream=f, verbosity=2, title="接口测试测试报告", description="测试案例执行结果")
 		runner.run(cases)
+	public_func.sendEmail.send_mail(title='接口测试测试报告', content='接口测试已完成，结果已附件发送', file=report)
