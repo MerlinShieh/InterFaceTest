@@ -7,7 +7,6 @@
 # *******************************************#
 import xlrd
 import config.cfg
-import public_func.log
 import pprint
 import os
 '''
@@ -24,11 +23,8 @@ def getExeclTestCaseList():
 
 	for n in range(len(table.col_values(4, start_rowx=1))):
 		CaseList = table.row_values(n + 1)
-		public_func.log.setLog(leavel='info', message=CaseList)
 		CaseDict = dict(zip(table_values, CaseList))
-		public_func.log.setLog(leavel='info', message=CaseDict)
 		Case.append(CaseDict)
-	public_func.log.setLog(leavel='info', message=Case)
 	return Case
 
 if __name__=="__main__":

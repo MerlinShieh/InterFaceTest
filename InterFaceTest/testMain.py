@@ -7,33 +7,64 @@
 # *******************************************#
 import unittest
 import ddt
-import public_func.useApi
-import public_func.log
+
+
 import public_func.readExcel
 import public_func.HTMLTestRunner
 import public_func.sendEmail
+import public_func.sendEmail
+import public_func.setInfo
 import config.cfg
+import public_func.useApi
 
-
+count = 1
 excelCase = public_func.readExcel.getExeclTestCaseList()
 @ddt.ddt()
 class testApiData(unittest.TestCase):
+	def setUp(self) -> None:
+
+		public_func.setInfo.write_log(message='第{}次执行用例'.format(count))
+		public_func.setInfo.write_log(message='测试开始')
+
 	@ddt.data(*excelCase)
 	def test_case_001(self, itme):
 		'''测试数据: {0}'''
 		if str(itme["model"]) == "GET":
-			res = public_func.useApi.SendHttp().getHttp(url=itme["host"], params=itme["data"])
-			self.assertEqual(str(res.status_code), '200')
-			public_func.log.setLog(leavel='info', message=res.text)
+			try:
+				res = public_func.useApi.SendHttp().getHttp(url=itme["host"], params=itme["data"])
+				public_func.setInfo.write_log(message=str(res.status_code))
+				public_func.setInfo.write_log(message=str(res.text))
+			except Exception as e:
+				public_func.setInfo.write_log(message=str('----------接口错误---------'))
+				public_func.setInfo.write_log(message=str(e))
+				public_func.setInfo.write_log(message=str('----------接口错误---------'))
+			finally:
+				self.assertEqual(str(res.status_code), '200')
+
 		elif str(itme["model"]) == "POST":
-			res = public_func.useApi.SendHttp().postHttp(url=itme["host"], data=itme["data"])
-			self.assertEqual(str(res.status_code), '200')
-			public_func.log.setLog(leavel='info', message=res.text)
+			try:
+				res = public_func.useApi.SendHttp().postHttp(url=itme["host"], data=itme["data"])
+				public_func.setInfo.write_log(message=str(res.status_code))
+				public_func.setInfo.write_log(message=str(res.text))
+			except Exception as e:
+				public_func.setInfo.write_log(message=str('----------接口错误---------'))
+				public_func.setInfo.write_log(message=str(e))
+				public_func.setInfo.write_log(message=str('----------接口错误---------'))
+			finally:
+				self.assertEqual(str(res.status_code), '200')
 		else:
 			return False
+		public_func.setInfo.write_log(message='测试中')
+	def tearDown(self) -> None:
+		public_func.setInfo.write_log(message='测试完成')
+		global count
+		count += 1
 
+# if __name__=="__main__":
+# 	unittest.main(verbosity=2)
 if __name__=="__main__":
 	cases = unittest.TestLoader().loadTestsFromTestCase(testApiData)
+
 	report = config.cfg.report_path
 	with open(report, 'wb') as f:
 		runner = public_func.HTMLTestRunner.HTMLTestRunner(stream=f, verbosity=2, title="接口测试测试报告", description="测试案例执行结果")
