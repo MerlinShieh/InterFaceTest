@@ -7,14 +7,16 @@
 # *******************************************#
 import unittest
 import ddt
+import sys
+import traceback
 import public_func.readExcel
 import public_func.HTMLTestRunner
 import public_func.sendEmail
 import public_func.sendEmail
 import public_func.setInfo
-import config.cfg
 import public_func.useApi
-import sys
+import config.cfg
+
 
 count = 1
 excelCase = public_func.readExcel.getExeclTestCaseList()
@@ -33,26 +35,21 @@ class testApiData(unittest.TestCase):
 				res = public_func.useApi.SendHttp().getHttp(url=itme["host"], params=itme["data"])
 				public_func.setInfo.write_log(modle=funcName, message=str(res.status_code))
 				public_func.setInfo.write_log(modle=funcName, message=str(res.text))
-			except Exception as e:
-				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
-				public_func.setInfo.write_log(modle=funcName, message=str(e))
-				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
-			finally:
 				self.assertEqual(str(res.status_code), '200')
-				public_func.setInfo.write_log(modle=funcName, message="----断言完成,实际结果status_code:{},预期结果:{}".format(res.status_code, '200'))
-
+			except :
+				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
+				public_func.setInfo.write_log(modle=funcName, message=str(traceback.format_exc()))
+				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
 		elif str(itme["model"]) == "POST":
 			try:
 				res = public_func.useApi.SendHttp().postHttp(url=itme["host"], data=itme["data"])
 				public_func.setInfo.write_log(modle=funcName, message=str(res.status_code))
 				public_func.setInfo.write_log(modle=funcName, message=str(res.text))
-			except Exception as e:
-				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
-				public_func.setInfo.write_log(modle=funcName, message=str(e))
-				public_func.setInfo.write_log(modle=funcName, pmessage=str('----------接口错误---------'))
-			finally:
 				self.assertEqual(str(res.status_code), '200')
-				public_func.setInfo.write_log(modle=funcName,message="----断言完成,实际结果status_code:{},预期结果:{}".format(res.status_code, '200'))
+			except:
+				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
+				public_func.setInfo.write_log(modle=funcName, message=str(traceback.format_exc()))
+				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
 		else:
 			return False
 		public_func.setInfo.write_log(modle=sys._getframe().f_code.co_name, message='测试中')
