@@ -16,6 +16,7 @@ import public_func.sendEmail
 import public_func.setInfo
 import config.cfg
 import public_func.useApi
+import sys
 
 count = 1
 excelCase = public_func.readExcel.getExeclTestCaseList()

@@ -12,9 +12,9 @@ from config.cfg import log_path
 
 time = str(time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()))
 
-def write_log(message):
+def write_log(message, modle=None):
 	with open(log_path, "a+") as f:
-		f.write(time+'  '+str(message)+"\n")
+		f.write(time + '  ' + str(modle) + '   ' + str(message) + "\n")
 
 # def logInfo(main, message):
 # 	def run(*argv):
@@ -31,18 +31,8 @@ def logInfo(msg):  # 工厂函数，用来接受@get_parameter('index.html/')的
 	def run(func):
 		def writeLog():
 			func()
-			print(func.__name__)
 			with open(log_path, "a+") as f:
 				f.write(time + '  ' + str(func.__name__) + '   ' + str(msg) + "\n")
-			print('现在结束装饰')
 		return writeLog
 
 	return run
-
-if __name__=="__main__":
-
-	@logInfo('测试日志')
-	def test():
-		print('我是被装饰的函数')
-	# return num+1
-	test()
