@@ -6,6 +6,10 @@
 # author:Merlin
 # dataTime:2020/6/26-22:21
 # *******************************************#
+import sys
+import os
+BASE_DIR =os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #当前程序上上一级目录，这里为InterFaceTest
+sys.path.append(BASE_DIR)
 import requests
 import json
 from pprint import pprint

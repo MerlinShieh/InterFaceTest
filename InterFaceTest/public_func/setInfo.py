@@ -7,6 +7,9 @@
 # *******************************************#
 import time
 import sys
+import os
+BASE_DIR =os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #当前程序上上一级目录，这里为InterFaceTest
+sys.path.append(BASE_DIR)
 from config.cfg import log_path
 # 使用装饰器来获取函数名称
 

@@ -6,11 +6,14 @@
 # dataTime:2020/6/27-0:03
 # *******************************************#
 import xlrd
+import sys
+import os
+BASE_DIR =os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #当前程序上上一级目录，这里为InterFaceTest
+sys.path.append(BASE_DIR)
 import config.cfg
 import pprint
 import public_func.setInfo
-import os
-import sys
+
 '''
 读取Excel表格里面的接口用例数据，以单条用例所有参数 封装成list
 	[1.0,'正常GET','http://hn216.api.yesapi.cn','GET','app_key=B2F70096FD3977B3F183DFD952F4446B&text=可以免费使用，基本上应用需要的数据都有接口提供&s=App.Scws.GetWords']
@@ -19,7 +22,6 @@ import sys
 '''
 
 table_values = ["number", "name", "host", "model", "data"]
-@public_func.setInfo.logInfo('列表获取')
 def getExeclTestCaseList():
 	Case = []
 	table = xlrd.open_workbook(config.cfg.testCaseExcel_path, 'r').sheet_by_name('interface')

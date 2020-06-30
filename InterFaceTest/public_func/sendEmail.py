@@ -6,6 +6,10 @@
 # dataTime:2020/6/28-22:28
 # *******************************************#
 # coding: utf-8
+import sys
+import os
+BASE_DIR =os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #当前程序上上一级目录，这里为InterFaceTest
+sys.path.append(BASE_DIR)
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 import smtplib
