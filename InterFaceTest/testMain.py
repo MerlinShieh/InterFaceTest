@@ -22,10 +22,8 @@ excelCase = public_func.readExcel.getExeclTestCaseList()
 @ddt.ddt()
 class testApiData(unittest.TestCase):
 	def setUp(self) -> None:
-
+		public_func.setInfo.write_log(message=str('----------测试开始---------'))
 		public_func.setInfo.write_log(message='第{}次执行用例'.format(count))
-		public_func.setInfo.write_log(message='测试开始')
-
 	@ddt.data(*excelCase)
 	def test_case_001(self, itme):
 		'''测试数据: {0}'''
@@ -40,6 +38,7 @@ class testApiData(unittest.TestCase):
 				public_func.setInfo.write_log(message=str('----------接口错误---------'))
 			finally:
 				self.assertEqual(str(res.status_code), '200')
+				public_func.setInfo.write_log(message="----断言完成,实际结果status_code:{},预期结果:{}".format(res.status_code, '200'))
 
 		elif str(itme["model"]) == "POST":
 			try:
@@ -52,11 +51,12 @@ class testApiData(unittest.TestCase):
 				public_func.setInfo.write_log(message=str('----------接口错误---------'))
 			finally:
 				self.assertEqual(str(res.status_code), '200')
+				public_func.setInfo.write_log(message="----断言完成,实际结果status_code:{},预期结果:{}".format(res.status_code, '200'))
 		else:
 			return False
 		public_func.setInfo.write_log(message='测试中')
 	def tearDown(self) -> None:
-		public_func.setInfo.write_log(message='测试完成')
+		public_func.setInfo.write_log(message=str('----------测试完成---------'))
 		global count
 		count += 1
 
@@ -64,9 +64,11 @@ class testApiData(unittest.TestCase):
 # 	unittest.main(verbosity=2)
 if __name__=="__main__":
 	cases = unittest.TestLoader().loadTestsFromTestCase(testApiData)
-
+	public_func.setInfo.write_log(message='cases加载完成')
+	public_func.setInfo.write_log(message=str(cases))
 	report = config.cfg.report_path
 	with open(report, 'wb') as f:
 		runner = public_func.HTMLTestRunner.HTMLTestRunner(stream=f, verbosity=2, title="接口测试测试报告", description="测试案例执行结果")
 		runner.run(cases)
-	public_func.sendEmail.send_mail(title='接口测试测试报告', content='接口测试已完成，结果已附件发送', file=report)
+		public_func.setInfo.write_log(message="测试报告生成完成，stream=f, verbosity=2, title='接口测试测试报告', description='测试案例执行结果'")
+	# public_func.sendEmail.send_mail(title='接口测试测试报告', content='接口测试已完成，结果已附件发送', file=report)
