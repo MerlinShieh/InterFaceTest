@@ -6,7 +6,7 @@ root_path = os.path.abspath(os.path.dirname(__file__)).split('InterFaceTestdemo'
 testCaseExcel_path = root_path+'InterFaceTestdemo\\InterFaceTest\\testcase\\testCase.xlsx'
 
 report_path = root_path+'InterFaceTestdemo\\InterFaceTest\\report\\TestReport_{}.html'.format(str(time.strftime("%Y_%m_%d_%H_%M_%S", time.localtime())))
-log_path = root_path+'InterFaceTestdemo\\InterFaceTest\\report\\log.log'
+log_path = root_path+'InterFaceTestdemo\\InterFaceTest\\report\\log_{}.log'.format(str(time.strftime("%Y_%m_%d_%H_%M_%S", time.localtime())))
 
 email = {
 	'username': 'xxxx@163.com',

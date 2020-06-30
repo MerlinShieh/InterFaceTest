@@ -13,10 +13,12 @@ sys.path.append(BASE_DIR)
 from config.cfg import log_path
 # 使用装饰器来获取函数名称
 
-time = str(time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()))
+
 
 def write_log(message, modle=None):
 	with open(log_path, "a+") as f:
+		import time
+		time = str(time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()))
 		f.write(time + '  ' + str(modle) + '   ' + str(message) + "\n")
 
 # def logInfo(main, message):

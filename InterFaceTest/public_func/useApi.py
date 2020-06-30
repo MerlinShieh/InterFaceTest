@@ -6,16 +6,13 @@
 # author:Merlin
 # dataTime:2020/6/26-22:21
 # *******************************************#
+import requests
+import json
+from pprint import pprint
 import sys
 import os
 BASE_DIR =os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #当前程序上上一级目录，这里为InterFaceTest
 sys.path.append(BASE_DIR)
-import requests
-import json
-from pprint import pprint
-
-from requests.exceptions import MissingSchema
-
 import config.cfg
 
 class SendHttp:
@@ -23,6 +20,7 @@ class SendHttp:
         res = requests.request("GET", url=url, params=params)
         return res
     def postHttp(self, url, data):
+        funcName = sys._getframe().f_code.co_name
         res = requests.request("POST", url=url, data=data)
         return res
 if __name__=="__main__":
