@@ -17,12 +17,14 @@ import public_func.setInfo
 import public_func.useApi
 import config.cfg
 
-
+# 测试用例执行次数
 count = 1
+# 导入所有的Excelcase
 excelCase = public_func.readExcel.getExeclTestCaseList()
 @ddt.ddt()
 class testApiData(unittest.TestCase):
 	def setUp(self) -> None:
+		# 获取当前函数名称 放入日志中
 		funcName = sys._getframe().f_code.co_name
 		public_func.setInfo.write_log(modle=funcName, message=str('----------测试开始---------'))
 		public_func.setInfo.write_log(modle=funcName, message='第{}次执行用例'.format(count))
@@ -35,26 +37,32 @@ class testApiData(unittest.TestCase):
 				res = public_func.useApi.SendHttp().getHttp(url=itme["host"], params=itme["data"])
 				public_func.setInfo.write_log(modle=funcName, message=str(res.status_code))
 				public_func.setInfo.write_log(modle=funcName, message=str(res.text))
-				self.assertEqual(str(res.status_code), '200')
 			except :
+				# 如果发生异常，直接将整个异常traceback捕获放入日志，相比较Exception更加清晰
 				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
 				public_func.setInfo.write_log(modle=funcName, message=str(traceback.format_exc()))
 				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
+			finally:
+				# 无论是否异常，都执行断言
+				self.assertEqual(str(res.status_code), '200')
 		elif str(itme["model"]) == "POST":
 			try:
 				res = public_func.useApi.SendHttp().postHttp(url=itme["host"], data=itme["data"])
 				public_func.setInfo.write_log(modle=funcName, message=str(res.status_code))
 				public_func.setInfo.write_log(modle=funcName, message=str(res.text))
-				self.assertEqual(str(res.status_code), '200')
+
 			except:
 				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
 				public_func.setInfo.write_log(modle=funcName, message=str(traceback.format_exc()))
 				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
+			finally:
+				self.assertEqual(str(res.status_code), '200')
 		else:
 			return False
-		public_func.setInfo.write_log(modle=sys._getframe().f_code.co_name, message='测试中')
+		public_func.setInfo.write_log(modle=funcName, message='测试中')
 	def tearDown(self) -> None:
-		public_func.setInfo.write_log(modle=sys._getframe().f_code.co_name, message=str('----------测试完成---------'))
+		funcName = sys._getframe().f_code.co_name
+		public_func.setInfo.write_log(modle=funcName, message=str('----------测试完成---------'))
 		global count
 		count += 1
 
