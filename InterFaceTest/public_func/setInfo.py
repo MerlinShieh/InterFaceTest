@@ -5,9 +5,10 @@
 # author:Merlin
 # dataTime:2020/6/29-22:38
 # *******************************************#
-import time
+
 import sys
 import os
+import time
 BASE_DIR =os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #当前程序上上一级目录，这里为InterFaceTest
 sys.path.append(BASE_DIR)
 from config.cfg import log_path
@@ -15,11 +16,10 @@ from config.cfg import log_path
 
 
 
-def write_log(message, modle=None):
-	with open(log_path, "a+") as f:
-		import time
-		time = str(time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()))
-		f.write(time + '  ' + str(modle) + '   ' + str(message) + "\n")
+def write_log(modle=None, path=log_path,*args, **kwargs):
+	with open(path, "a+") as f:
+		nowtime = str(time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime()))
+		f.write(nowtime + '      ' + str(modle) + '      ' + str(args) + '      ' + str(kwargs) + "\n\n")
 
 # def logInfo(main, message):
 # 	def run(*argv):

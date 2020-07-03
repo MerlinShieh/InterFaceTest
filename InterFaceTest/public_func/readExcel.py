@@ -28,13 +28,13 @@ def getExeclTestCaseList():
 	funcName = sys._getframe().f_code.co_name
 	Case = []
 	table = xlrd.open_workbook(config.cfg.testCaseExcel_path, 'r').sheet_by_name('interface')
-
 	for n in range(len(table.col_values(4, start_rowx=1))):
 		CaseList = table.row_values(n + 1)
+		# print(CaseList[4])
 		public_func.setInfo.write_log(modle=funcName, message="加载一条用例:{}".format(CaseList))
 		CaseDict = dict(zip(table_values, CaseList))
 		Case.append(CaseDict)
 	return Case
 
 if __name__=="__main__":
-	pprint.pprint(getExeclTestCaseList())
+	getExeclTestCaseList()

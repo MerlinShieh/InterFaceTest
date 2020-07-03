@@ -30,33 +30,44 @@ class testApiData(unittest.TestCase):
 		public_func.setInfo.write_log(modle=funcName, message='第{}次执行用例'.format(count))
 	@ddt.data(*excelCase)
 	def test_case_001(self, itme):
+		'''
+		测试用例
+		:param itme:迭代器，每次获取一个测试用例数据的字典
+		:return:
+		'''
 		funcName = sys._getframe().f_code.co_name
 		'''测试数据: {0}'''
 		if str(itme["model"]) == "GET":
 			try:
-				res = public_func.useApi.SendHttp().getHttp(url=itme["host"], params=itme["data"])
-				public_func.setInfo.write_log(modle=funcName, message=str(res.status_code))
-				public_func.setInfo.write_log(modle=funcName, message=str(res.text))
-			except :
-				# 如果发生异常，直接将整个异常traceback捕获放入日志，相比较Exception更加清晰
-				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
-				public_func.setInfo.write_log(modle=funcName, message=str(traceback.format_exc()))
-				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
-			finally:
-				# 无论是否异常，都执行断言
-				self.assertEqual(str(res.status_code), '200')
-		elif str(itme["model"]) == "POST":
-			try:
-				res = public_func.useApi.SendHttp().postHttp(url=itme["host"], data=itme["data"])
-				public_func.setInfo.write_log(modle=funcName, message=str(res.status_code))
-				public_func.setInfo.write_log(modle=funcName, message=str(res.text))
-
+				public_func.setInfo.write_log(modle=funcName, message=itme)
+				url = itme['host']
+				data = itme['data'].replace(" ", "")
+				public_func.setInfo.write_log(modle=funcName, url=url, type=data)
+				resp = public_func.useApi.SendHttp().getHttp(url=url, params=data)
+				public_func.setInfo.write_log(modle=funcName, param="status", resp=(str(resp.text)[:300]))
+				assert resp.status_code == "200"
 			except:
-				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
-				public_func.setInfo.write_log(modle=funcName, message=str(traceback.format_exc()))
-				public_func.setInfo.write_log(modle=funcName, message=str('----------接口错误---------'))
+				error = traceback.format_exc()
+				public_func.setInfo.write_log(modle=funcName, param="Error", Error=error)
 			finally:
-				self.assertEqual(str(res.status_code), '200')
+				self.assertEqual(str(resp.status_code), '200')
+			pass
+		elif str(itme["model"]) == "POST":
+
+			public_func.setInfo.write_log(modle=funcName, message=itme)
+			url = itme['host']
+			data = eval(itme['data'].replace(" ", ""))
+			public_func.setInfo.write_log(modle=funcName, param="参数:", url=url, type=data)
+			try:
+				resp = public_func.useApi.SendHttp().postHttp(url=url, data=data)
+				public_func.setInfo.write_log(modle=funcName, param="status", resp=(str(resp.text)[:300]))
+			except:
+				error = traceback.format_exc()
+				public_func.setInfo.write_log(modle=funcName, param="Error", Error=error)
+			finally:
+				self.assertEqual(str(resp.status_code), '200')
+				public_func.setInfo.write_log(modle=funcName, param="status_code", code=(str(resp.status_code), '200'))
+			pass
 		else:
 			return False
 		public_func.setInfo.write_log(modle=funcName, message='测试中')
@@ -77,4 +88,7 @@ if __name__=="__main__":
 		runner = public_func.HTMLTestRunner.HTMLTestRunner(stream=f, verbosity=2, title="接口测试测试报告", description="测试案例执行结果")
 		runner.run(cases)
 		public_func.setInfo.write_log(modle=sys._getframe().f_code.co_name, message="测试报告生成完成，stream=f, verbosity=2, title='接口测试测试报告', description='测试案例执行结果'")
-	# public_func.sendEmail.send_mail(title='接口测试测试报告', content='接口测试已完成，结果已附件发送', file=report)
+	'''
+	发送邮件
+	public_func.sendEmail.send_mail(title='接口测试测试报告', content='接口测试已完成，结果已附件发送', file=report)
+	'''
