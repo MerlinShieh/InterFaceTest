@@ -22,6 +22,13 @@ import config.cfg
 
 class SendHttp:
     def getHttp(self, url, params):
+        '''
+        发送get请求
+        :param url:
+        :param params:
+        :return:
+        '''
+        funcName = sys._getframe().f_code.co_name
         res = requests.request("GET", url=url, params=params)
         return res
     def postHttp(self, url, data):
@@ -38,3 +45,4 @@ if __name__=="__main__":
     print(type(data))
     resp = SendHttp().postHttp(url=url, data=data)
     print(resp.text)
+    print(resp.status_code)

@@ -28,6 +28,13 @@ class testApiData(unittest.TestCase):
 		funcName = sys._getframe().f_code.co_name
 		public_func.setInfo.write_log(modle=funcName, message=str('----------测试开始---------'))
 		public_func.setInfo.write_log(modle=funcName, message='第{}次执行用例'.format(count))
+		
+	def tearDown(self) -> None:
+		funcName = sys._getframe().f_code.co_name
+		public_func.setInfo.write_log(modle=funcName, message=str('----------测试完成---------'))
+		global count
+		count += 1
+
 	@ddt.data(*excelCase)
 	def test_case_001(self, itme):
 		'''
@@ -38,20 +45,22 @@ class testApiData(unittest.TestCase):
 		funcName = sys._getframe().f_code.co_name
 		'''测试数据: {0}'''
 		if str(itme["model"]) == "GET":
+			public_func.setInfo.write_log(modle=funcName, message=itme)
+			url = itme['host']
+			data = itme['data'].replace(" ", "")
+			public_func.setInfo.write_log(modle=funcName, url=url, type=data)
 			try:
-				public_func.setInfo.write_log(modle=funcName, message=itme)
-				url = itme['host']
-				data = itme['data'].replace(" ", "")
-				public_func.setInfo.write_log(modle=funcName, url=url, type=data)
 				resp = public_func.useApi.SendHttp().getHttp(url=url, params=data)
 				public_func.setInfo.write_log(modle=funcName, param="status", resp=(str(resp.text)[:300]))
-				assert resp.status_code == "200"
+				# 这里断言一下 断言失败的话将错误信息捕获到日志
+				self.assertEqual(str(resp.status_code), '200')
 			except:
 				error = traceback.format_exc()
 				public_func.setInfo.write_log(modle=funcName, param="Error", Error=error)
 			finally:
+				# 这里同样断言一下，如果上面断言失败，会将错误捕获，这里同样断言失败则会触发unittest用例失败
 				self.assertEqual(str(resp.status_code), '200')
-			pass
+
 		elif str(itme["model"]) == "POST":
 
 			public_func.setInfo.write_log(modle=funcName, message=itme)
@@ -60,22 +69,19 @@ class testApiData(unittest.TestCase):
 			public_func.setInfo.write_log(modle=funcName, param="参数:", url=url, type=data)
 			try:
 				resp = public_func.useApi.SendHttp().postHttp(url=url, data=data)
+				self.assertEqual(str(resp.status_code), '200')
 				public_func.setInfo.write_log(modle=funcName, param="status", resp=(str(resp.text)[:300]))
+				# 这里断言一下 断言失败的话将错误信息捕获到日志
+				self.assertEqual(str(resp.status_code), '200')
 			except:
 				error = traceback.format_exc()
 				public_func.setInfo.write_log(modle=funcName, param="Error", Error=error)
 			finally:
+				# 这里同样断言一下，如果上面断言失败，会将错误捕获，这里同样断言失败则会触发unittest用例失败
 				self.assertEqual(str(resp.status_code), '200')
-				public_func.setInfo.write_log(modle=funcName, param="status_code", code=(str(resp.status_code), '200'))
-			pass
 		else:
 			return False
-		public_func.setInfo.write_log(modle=funcName, message='测试中')
-	def tearDown(self) -> None:
-		funcName = sys._getframe().f_code.co_name
-		public_func.setInfo.write_log(modle=funcName, message=str('----------测试完成---------'))
-		global count
-		count += 1
+
 
 # if __name__=="__main__":
 # 	unittest.main(verbosity=2)
