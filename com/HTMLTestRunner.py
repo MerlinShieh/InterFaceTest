@@ -666,6 +666,7 @@ class HTMLTestRunner(Template_mixin):
             ('Start Time', startTime),
             ('Duration', duration),
             ('Status', status),
+            ('Author', '谢睦邻'),
         ]
 
 
