@@ -52,7 +52,7 @@ class testApiData(unittest.TestCase):
                 error = traceback.format_exc()
                 print(error)
                 raise NameError
-            except:
+            except Exception:
                 raise
 
         elif str(itme['model']) == 'POST':
@@ -75,7 +75,7 @@ class testApiData(unittest.TestCase):
                 error = traceback.format_exc()
                 print(error)
                 raise NameError
-            except:
+            except Exception:
                 raise
         else:
             return False
