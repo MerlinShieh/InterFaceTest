@@ -20,6 +20,7 @@ excelCase = getExcelTestCaserList()
 
 @ddt.ddt()
 class testApiData(unittest.TestCase):
+    @classmethod
     def setUpClass(cls) -> None:
         pass
 
