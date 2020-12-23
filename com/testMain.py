@@ -8,11 +8,28 @@
 
 import unittest
 import ddt
-import sys
+import os
 import traceback
+
+import HTMLTestRunner
 from httpApi import Http
-from httpApi import HttpError
+import time
 from readExcel import getExcelTestCaserList
+from log import LogHandler
+
+import configparser
+config = configparser.ConfigParser()
+config.read('../config/config.ini', encoding='UTF-8')
+
+
+COUNTRY = config.get('Country', 'country')
+TestTime = str(time.strftime("%Y_%m_%d_%H_%M_%S", time.localtime()))
+
+logger = LogHandler(log_name=r"../report/{}/TestReport_{}_{}.log"
+                    .format(str(time.strftime('%Y_%m_%d', time.localtime())), COUNTRY, TestTime),
+                    log_level="DEBUG").create_logger()
+reportHTML = r'../report/{}/TestReport_{}_{}.html'.format(
+    str(time.strftime('%Y_%m_%d', time.localtime())), COUNTRY, TestTime)
 
 count = 1
 excelCase = getExcelTestCaserList()
@@ -22,39 +39,47 @@ excelCase = getExcelTestCaserList()
 class testApiData(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        pass
+        try:
+            os.mkdir(r"../report/{}".format(str(time.strftime("%Y_%m_%d", time.localtime()))))
+        except FileExistsError:
+            pass
 
     def setUp(self) -> None:
-        print('Test Start, Test Count: {}'.format(count))
+        global STATUS
+        logger.info('Test Start, Test Count: {}'.format(count))
 
     def tearDown(self) -> None:
-        print('Test Over')
+        logger.info('Test Over\n')
+
+        logger.info('{}{}{}{}{}'.format('\n', '*' * 30, STATUS, '*' * 30, '\n'))
         global count
         count += 1
 
     @ddt.data(*excelCase)
     def test_Case(self, itme):
-
         if str(itme['model']) == 'GET':
             url = itme['host']
             data = itme['data'].replace(' ', '')
             result = str(int(itme['result']))
             try:
+                logger.debug('request GET url={}, data={}'.format(url, data))
                 resp = Http().get(url=url, data=data)
-                if not resp.status_code == '200':
-                    raise HttpError
-                code = str(resp.json()['code'])
-                print(resp.text)
-                self.assertEqual(result, code)
-            except HttpError:
-                print('requests Error, status != 200')
-                raise HttpError
-            except NameError:
-                error = traceback.format_exc()
-                print(error)
-                raise NameError
+
+                logger.debug('response  {}   {}'.format(resp.status_code, resp.text))
+                self.assertEqual(str(result), str(resp.json()['code']))
+
+                logger.info('result:{}  code:{}'.format(result, resp.json()['code']))
+                global STATUS
+                STATUS = 'PASS'
+
+
             except Exception:
-                raise
+                error = traceback.format_exc()
+                logger.error('{}'.format(error))
+                print(error)
+
+                STATUS = 'FAIL'
+                raise Exception
 
         elif str(itme['model']) == 'POST':
             url = itme['host']
@@ -62,25 +87,46 @@ class testApiData(unittest.TestCase):
             result = str(int(itme['result']))
 
             try:
-                resp = Http().post(url=url, data=data, signKey=None)
-                if not resp.status_code == '200':
-                    raise HttpError
-                code = str((resp.json()['code']))
-                print(resp.text)
-                self.assertEqual(result, code)
-            except HttpError:
-                print('requests Error, status != 200')
-                raise HttpError
+                logger.debug('request  POST  url={}, data={}, signkey={}'
+                             .format(url, data, '***'))
+                resp = Http().post(url=url, data=data)
+                logger.debug('response  {}   {}'.format(resp.status_code, resp.text))
 
-            except NameError:
-                error = traceback.format_exc()
-                print(error)
-                raise NameError
+                self.assertEqual(str(result), str(resp.json()['code']))
+                logger.info('result:{}  code:{}'.format(result, resp.json()['code']))
+
+
+                STATUS = 'PASS'
+
+
             except Exception:
-                raise
+                error = traceback.format_exc()
+                logger.error('{}'.format(error))
+                print(error)
+
+                STATUS = 'FAIL'
+                raise Exception
         else:
             return False
 
 
+# if __name__ == "__main__":
+#     unittest.main(verbosity=2)
 if __name__ == "__main__":
-    unittest.main(verbosity=2)
+    # run()
+    cases = unittest.TestLoader().loadTestsFromTestCase(testApiData)
+
+    COUNTRY = config.get('Country', 'country')
+    if COUNTRY == "test":
+        env = "测试环境接口测试测试报告"
+    elif COUNTRY == "CN":
+        env = "国内线上环境接口测试测试报告"
+    elif COUNTRY == "EU":
+        env = "欧盟线上环境接口测试测试报告"
+    elif COUNTRY == "SG":
+        env = "新加坡线上环境接口测试测试报告"
+    else:
+        env = "接口测试测试报告"
+    with open(reportHTML, 'wb') as f:
+        runner = HTMLTestRunner.HTMLTestRunner(stream=f, verbosity=2, title=env, description="测试案例执行结果")
+        runner.run(cases)

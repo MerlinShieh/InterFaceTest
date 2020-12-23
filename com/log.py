@@ -10,11 +10,11 @@ sys.path.append(BASE_DIR)
 
 class LogHandler(object):
 
-    def __init__(self, log_name='log.log', dir='../report/', debug=True, log_level="INFO"):
+    def __init__(self, log_name='log.log', debug=True, log_level="INFO"):
 
         self.debug = debug
         self.log_name = log_name
-        self.dir = dir
+
         self.log_level = log_level
 
     def create_logger(self):
