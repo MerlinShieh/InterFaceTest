@@ -1,4 +1,8 @@
 
+### 本次测试采用的是本地flask服务,如果有实际测试项目,可以更改Excel里面的内容,如果想学习又没有接口,可以fork我这个项目
+https://github.com/MerlinShieh/flask.git
+##### 直接安装运行python app.py就行
+
 ### 目录说明
 - com：
   - HTMLTestRunner.py(已废弃), 生成测试报告,现在使用XTestRunner
