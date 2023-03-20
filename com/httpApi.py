@@ -7,37 +7,85 @@
 # dataTime:2020/12/12
 # *******************************************#
 
-import requests
+import configparser
 import json
 
-import configparser
-config = configparser.ConfigParser()
-config.read('../config/config.ini', encoding='UTF-8')
+import requests
 
-from sign import getSign
+from com.log import logger, log, BASE_DIR
+
+config = configparser.ConfigParser()
+config.read(f'{BASE_DIR}/config/config.ini', encoding='UTF-8')
+
 
 class HttpError(Exception):
     def __init__(self):
         self.ErrorInfo = 'Error'
+
     def __str__(self):
         return self.ErrorInfo
+
 
 class Http:
     def __init__(self):
         pass
 
-    def get(self, url, data):
-        resp = requests.request('GET', url=url, params=data)
+    @staticmethod
+    @logger(__name__)
+    def get(url, data, headers=None):
+        if not headers:
+            headers = {
+                'Accept': '<Accept>',
+                'Accept-Language': '<Accept-Language>',
+                'Connection': '<Connection>',
+                'Host': '<Host>',
+                'kbn-version': '<kbn-version>',
+                'Origin': '<Origin>',
+                'Referer': '<Referer>',
+                'User-Agent': '<User-Agent>',
+                'Cookie': '<Cookie>',
+                'content-type': '<content-type>'
+            }
+        resp = requests.request('GET', url=url, headers=headers, params=data)
         return resp
 
-    def post(self, url, data, signKey=config.get('Country', 'Key')):
-        data = json.dumps(data, separators=(',', ':'))
-        sign = getSign(message=json.loads(data), key=signKey)
-        headers = {
-            'sign': sign,
-            'Accept-Language': 'zh-CN',
-            'Content-Type': 'application/json',
-        }
+    @staticmethod
+    @logger(__name__)
+    def post(url: str, data: str, signKey=config.get('sign', 'key'), headers=None, isForm=True):
+        """
+        不需要做加密的可以把这里重写
+        :param isForm: 默认采用表单提交 bool
+        :param headers:
+        :param url:
+        :param data: dict格式
+        :param signKey:
+        :return:
+        """
 
-        resp = requests.request('POST', url=url, data=data, headers=headers)
+        if not headers:
+            headers = {
+                'Accept': '<Accept>',
+                'Accept-Language': '<Accept-Language>',
+                'Connection': '<Connection>',
+                'Host': '<Host>',
+                'kbn-version': '<kbn-version>',
+                'Origin': '<Origin>',
+                'Referer': '<Referer>',
+                'User-Agent': '<User-Agent>',
+                'Cookie': '<Cookie>',
+            }
+
+        # sign = getSign(msg=json.loads(data), key=signKey)
+        # log.debug(sign)
+        # headers['sign'] = sign
+        log.info(f'data: {data}')
+
+        if isForm:
+            log.debug('isForm True')
+            headers['Content-Type'] = "application/x-www-form-urlencoded; charset=UTF-8"
+            resp = requests.request('POST', url=url, data=json.loads(data), headers=headers)
+        else:
+            log.debug('isForm False')
+            headers['Content-Type'] = "application/json; charset=UTF-8"
+            resp = requests.request('POST', url=url, json=data, headers=headers)
         return resp

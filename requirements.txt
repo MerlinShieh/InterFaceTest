@@ -1,0 +1,4 @@
+ddt==1.6.0
+requests==2.28.2
+xlrd==1.2.0
+logbook==1.5.3

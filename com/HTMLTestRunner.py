@@ -530,6 +530,8 @@ class _TestResult(TestResult):
         #   stack trace,
         # )
         self.result = []
+        self.outputBuffer = io.StringIO()
+        self.test_start_time = round(time.time(), 2)
 
 
     def startTest(self, test):
@@ -666,7 +668,7 @@ class HTMLTestRunner(Template_mixin):
             ('Start Time', startTime),
             ('Duration', duration),
             ('Status', status),
-            ('Author', '谢睦邻'),
+            ('Author', 'Merlin'),
         ]
 
 
