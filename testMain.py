@@ -32,11 +32,6 @@ class TestApiData(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         global STATUS
-        report_path = BASE_DIR + "/report/{}".format(str(time.strftime("%Y_%m_%d", time.localtime())))
-        try:
-            os.mkdir(report_path)
-        except FileExistsError:
-            pass
 
     def setUp(self) -> None:
 
@@ -74,21 +69,30 @@ class TestApiData(unittest.TestCase):
         self.assertEqual(int(_assert), int(resp.json()['code']))
 
 
-if __name__ == "__main__":
-    unittest.main(verbosity=2)
+#
 # if __name__ == "__main__":
-#     # run()
-#     cases = unittest.TestLoader().loadTestsFromTestCase(TestApiData)
-#
-#     SHEET = config.get('path', 'sheet')
-#     if SHEET == "test":
-#         env = "测试环境接口测试测试报告"
-#     else:
-#         env = "接口测试测试报告"
-#
-#     report_path = BASE_DIR + "/report/{}".format(str(time.strftime("%Y_%m_%d", time.localtime())))+log.name+'.html'
-#     log.info(report_path)
-#     with open(report_path, 'wb') as f:
-#         runner = com.HTMLTestRunner.HTMLTestRunner(
-#             stream=f, verbosity=2, title=env, description="测试案例执行结果")
-#         runner.run(cases)
+#     unittest.main(verbosity=2)
+if __name__ == "__main__":
+    # run()
+    cases = unittest.TestLoader().loadTestsFromTestCase(TestApiData)
+
+    SHEET = config.get('path', 'sheet')
+    if SHEET == "test":
+        env = "测试环境接口测试测试报告"
+    else:
+        env = "接口测试测试报告"
+
+    report_path = os.path.join(BASE_DIR, r'report', str(time.strftime("%Y_%m_%d", time.localtime())))
+    try:
+        os.mkdir(report_path)
+        log.debug('create success')
+    except FileExistsError:
+        log.debug('directory FileExistsError')
+
+    report_path = os.path.join(BASE_DIR, r'report', str(time.strftime("%Y_%m_%d", time.localtime())),
+                               log.name + '.html')
+    log.info(report_path)
+    with open(report_path, 'wb') as f:
+        runner = com.HTMLTestRunner.HTMLTestRunner(
+            stream=f, verbosity=2, title=env, description="测试案例执行结果")
+        runner.run(cases)
