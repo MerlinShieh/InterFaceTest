@@ -57,15 +57,15 @@ class TestApiData(unittest.TestCase):
             elif str(itme['_method']) == 'POST':
                 resp = Http().post(url=_host + _path, data=_data)
             log.info(f"resp.text: {resp.text}")
-            if self.assertEqual(int(_assert), int(resp.json()['code'])) is None:
-                log.debug('Test Pass')
-                STATUS = 'PASS'
-            else:
-                log.debug('Test Fail')
-                STATUS = 'FAIL'
         except Exception as e:
             log.debug('Test Error')
             log.error(e)
+            STATUS = 'FAIL'
+        if self.assertEqual(int(_assert), int(resp.json()['code'])) is None:
+            log.debug('Test Pass')
+            STATUS = 'PASS'
+        else:
+            log.debug('Test Fail')
             STATUS = 'FAIL'
         self.assertEqual(int(_assert), int(resp.json()['code']))
 
