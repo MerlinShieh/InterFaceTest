@@ -14,7 +14,8 @@ import os
 import traceback
 import time
 import configparser
-import com.HTMLTestRunner
+# from com.HTMLTestRunner import HTMLTestRunner
+from XTestRunner import HTMLTestRunner
 
 from com.log import log, logger, BASE_DIR
 from com.httpApi import Http
@@ -93,6 +94,6 @@ if __name__ == "__main__":
                                log.name + '.html')
     log.info(report_path)
     with open(report_path, 'wb') as f:
-        runner = com.HTMLTestRunner.HTMLTestRunner(
+        runner = HTMLTestRunner(
             stream=f, verbosity=2, title=env, description="测试案例执行结果")
         runner.run(cases)
