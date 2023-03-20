@@ -46,10 +46,10 @@ class TestApiData(unittest.TestCase):
     @ddt.data(*excelCase)
     def test_Case(self, itme: dict):
 
-        # table_values = ['_number', '_ame', '_host', '_path', '_method', '_type', '_data', '_assert']
+        # table_values = ['_number', '_ame', '_host', '_path', '_method', '_type', '_data', '_assert', '_isSkip']
         global resp, STATUS
 
-        _number, _ame, _host, _path, _method, _type, _data, _assert = itme.values()
+        _number, _ame, _host, _path, _method, _type, _data, _assert, _isSkip = itme.values()
         log.debug(itme.values())
         try:
             if str(itme['_method']) == 'GET':
