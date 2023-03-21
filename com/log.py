@@ -16,6 +16,7 @@ LOG_DIR = os.path.join(BASE_DIR, 'log')
 file_stream = False
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
+    print(LOG_DIR)
     file_stream = True
 
 
@@ -45,16 +46,14 @@ def logger(param):
             log.info("全部args参数参数信息 , {}".format(str(args)))
             log.info("全部kwargs参数信息 , {}".format(str(kwargs)))
             return function(*args, **kwargs)
+
         return _wrap
+
     return wrap
 
 
 if __name__ == "__main__":
     # 在别的文件引入这个类， 然后用这个对象即可
-    log.debug("video")
-    log.debug("video")
-    log.debug("video")
-    log.debug("video")
-    log.debug("video")
-    log.debug("video")
+    log.debug("1231231231sdsadasd")
+
     log.info(log.name)

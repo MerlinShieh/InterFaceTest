@@ -1,0 +1,47 @@
+-
+  feature: 第一个模块
+  story: 注册接口
+  title: 正常注册
+  request:
+    method: post
+    url: 127.0.0.1:5000/register
+    headers:
+      Content-Type: application/json
+    json:
+      username: user001
+      passwd: '123'
+    data: null
+    params: null
+    validate: null
+
+-
+  feature: 第一个模块
+  story: 注册接口
+  title: 重复用户名无法注册
+  request:
+    method: post
+    url: 127.0.0.1:5000/register
+    headers:
+      Content-Type: application/json
+    json:
+      username: Merlin
+      passwd: '123'
+    data: null
+    params: null
+    validate: null
+
+-
+  feature: 第一个模块
+  story: 注册接口
+  title: 用户名或者密码为空无法注册
+  request:
+    method: post
+    url: 127.0.0.1:5000/register
+    headers:
+      Content-Type: application/json
+    json:
+      username: user001
+      passwd: null
+    data: null
+    params: null
+    validate: null
