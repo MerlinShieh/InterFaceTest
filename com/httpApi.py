@@ -51,14 +51,13 @@ class Http:
 
     @staticmethod
     @logger(__name__)
-    def post(url: str, data: str, signKey=config.get('sign', 'key'), headers=None, isForm=True):
+    def post(url: str, data: str, headers=None, isForm=True):
         """
         不需要做加密的可以把这里重写
         :param isForm: 默认采用表单提交 bool
         :param headers:
         :param url:
         :param data: dict格式
-        :param signKey:
         :return:
         """
 
@@ -88,4 +87,7 @@ class Http:
             log.debug('isForm False')
             headers['Content-Type'] = "application/json; charset=UTF-8"
             resp = requests.request('POST', url=url, json=data, headers=headers)
+            # resp.status_code
+            # resp.json()
+            # resp.text
         return resp
