@@ -14,4 +14,7 @@
     <orderEntry type="module" module-name="Flask" />
     <orderEntry type="module" module-name="flaskProject" />
   </component>
+  <component name="PackageRequirementsSettings">
+    <option name="modifyBaseFiles" value="true" />
+  </component>
 </module>
