@@ -17,7 +17,7 @@ config.read(f'{BASE_DIR}/config/config.ini', encoding='UTF-8')
 Excelpath = os.path.join(BASE_DIR, config.get('path', 'Excelpath'))
 sheetName = config.get('path', 'sheet')
 
-table_values = ['_number', '_ame', '_host', '_path', '_method', '_type', '_data', '_assert']
+table_values = ['_number', '_ame', '_host', '_path', '_method', '_type', '_data', '_assert', '_isSkip']
 
 
 @logger(__name__)
