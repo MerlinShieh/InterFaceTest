@@ -16,6 +16,7 @@ from log import log, logger, BASE_DIR
 from config import API_CONFIG, PROJECT_NAME
 
 
+@logger(__name__)
 def post(headers, address, mime_type, timeout=10, data=None, files=None, cookies=None):
     """
     post请求
@@ -46,17 +47,19 @@ def post(headers, address, mime_type, timeout=10, data=None, files=None, cookies
                                  timeout=timeout,
                                  cookies=cookies,
                                  verify=False)
-    elif 'application/json' in mime_type:
+    # x-www-form-urlencoded
+    elif 'json' in mime_type:
         response = requests.post(url=address,
-                                 data=data,
+                                 json=data,
                                  headers=headers,
                                  timeout=timeout,
                                  files=files,
                                  cookies=cookies,
                                  verify=False)
     else:
+        log.debug('默认的表单方式')
         response = requests.post(url=address,
-                                 json=data,
+                                 data=data,
                                  headers=headers,
                                  timeout=timeout,
                                  files=files,
@@ -77,6 +80,7 @@ def post(headers, address, mime_type, timeout=10, data=None, files=None, cookies
         raise
 
 
+@logger(__name__)
 def get(headers, address, data, timeout=8, cookies=None):
     """
     get请求
@@ -106,6 +110,8 @@ def get(headers, address, data, timeout=8, cookies=None):
         log.error(e)
         raise
 
+
+@logger(__name__)
 def put(headers, address, mime_type, timeout=8, data=None, files=None, cookies=None):
     """
     put请求
@@ -141,6 +147,7 @@ def put(headers, address, mime_type, timeout=8, data=None, files=None, cookies=N
         raise
 
 
+@logger(__name__)
 def delete(headers, address, data, timeout=8, cookies=None):
     """
     delete请求
@@ -169,6 +176,7 @@ def delete(headers, address, data, timeout=8, cookies=None):
         raise
 
 
+@logger(__name__)
 def save_cookie(headers, address, mime_type, timeout=8, data=None, files=None, cookies=None):
     """
     保存cookie信息
