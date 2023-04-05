@@ -12,12 +12,15 @@ import simplejson
 from requests_toolbelt import MultipartEncoder
 from utils.readYaml import write_yaml_file, read_yaml_data
 from utils import log, logger, BASE_DIR
-
 from config import API_CONFIG, PROJECT_NAME
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 os.environ['NO_PROXY'] = 'stackoverflow.com'
 
-@logger(__name__)
+
+@log.catch
+@logger(__file__)
 def post(headers, address, mime_type, timeout=10, json=None, data=None, files=None, cookies=None):
     """
     post请求
@@ -32,25 +35,28 @@ def post(headers, address, mime_type, timeout=10, json=None, data=None, files=No
     :return:
     """
     # 判断请求参数类型
-    if 'form_data' in mime_type:
-        for key in files:
-            value = files[key]
-            # 判定参数值是否为文件，如果是则替换为二进制值
-            if '/' in value:
-                files[key] = (os.path.basename(value), open(value, 'rb'))
-        enc = MultipartEncoder(
-            fields=files,
-            boundary='--------------' + str(random.randint(1e28, 1e29 - 1))
-        )
-        headers['Content-Type'] = enc.content_type
+    if 'form-data' in mime_type:
+        log.debug('使用form-data参数上传')
+        # for key in files:
+        #     value = files[key]
+        #     # 判定参数值是否为文件，如果是则替换为二进制值
+        #     if '/' in value:
+        #         files[key] = (os.path.basename(value), open(value, 'rb'))
+        # enc = MultipartEncoder(
+        #     fields=files,
+        #     boundary='--------------' + str(random.randint(1e28, 1e29 - 1))
+        # )
+        # headers['Content-Type'] = enc.content_type
         response = requests.post(url=address,
-                                 data=enc,
+                                 data=data,
+                                 json=json,
                                  headers=headers,
                                  timeout=timeout,
                                  cookies=cookies,
                                  verify=False)
     # x-www-form-urlencoded
     elif 'json' in mime_type:
+        log.debug('使用json参数上传')
         response = requests.post(url=address,
                                  json=json,
                                  data=data,
@@ -60,7 +66,7 @@ def post(headers, address, mime_type, timeout=10, json=None, data=None, files=No
                                  cookies=cookies,
                                  verify=False)
     else:
-        log.debug('默认的表单方式')
+        log.warning('默认的方式')
         response = requests.post(url=address,
                                  data=data,
                                  json=json,
@@ -71,6 +77,8 @@ def post(headers, address, mime_type, timeout=10, json=None, data=None, files=No
                                  verify=False)
     try:
         if response.status_code != 200:
+            log.warning('Code Not 200')
+            log.warning(f'{response.status_code}  {response.text}')
             return response.status_code, response.text
         else:
             return response.status_code, response.json()
