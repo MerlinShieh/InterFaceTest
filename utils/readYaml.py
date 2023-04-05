@@ -9,6 +9,7 @@ import yaml
 from utils import log, logger, BASE_DIR
 
 
+@log.catch
 def read_yaml_data(yaml_file):
     """读取yaml文件数据
     :param yaml_file: yaml文件地址
@@ -19,6 +20,7 @@ def read_yaml_data(yaml_file):
         return yaml.load(fr, Loader=yaml.SafeLoader)
 
 
+@log.catch
 def write_yaml_file(yaml_file, obj):
     """把对象obj写入yaml文件
     :param yaml_file: yaml文件地址

@@ -39,17 +39,17 @@
 
 - feature: HTTP 方法
   story: POST方式
-  title: POST使用json参数
+  title: POST使用form-data参数
   request:
     method: post
     url: https://echo.apifox.com
     path: /post
     headers:
-      Content-Type: application/json
-    mime_type: application/json
+      Content-Type: multipart/form-data; boundary=--------------------------785165283412178555089095
+    mime_type: multipart/form-data
     json:
       username: PostMethod
-      passwd: json
+      passwd: form-data
     data: null
     params: null
     file: null
