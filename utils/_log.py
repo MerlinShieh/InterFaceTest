@@ -1,3 +1,8 @@
+# -*- coding:utf-8 -*-
+# @Time    : 2023/4/05
+# @Author  : Merlin
+# @File    : _log.py
+# *************************
 
 import os
 import sys
