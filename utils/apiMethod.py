@@ -11,15 +11,17 @@ import requests
 import simplejson
 from requests_toolbelt import MultipartEncoder
 from utils.readYaml import write_yaml_file, read_yaml_data
-from log import log, logger, BASE_DIR
+from utils import log, logger, BASE_DIR
 
 from config import API_CONFIG, PROJECT_NAME
 
+os.environ['NO_PROXY'] = 'stackoverflow.com'
 
 @logger(__name__)
-def post(headers, address, mime_type, timeout=10, data=None, files=None, cookies=None):
+def post(headers, address, mime_type, timeout=10, json=None, data=None, files=None, cookies=None):
     """
     post请求
+    :param json:
     :param headers: 请求头
     :param address: 请求地址
     :param mime_type: 请求参数格式（form_data,raw）
@@ -50,7 +52,8 @@ def post(headers, address, mime_type, timeout=10, data=None, files=None, cookies
     # x-www-form-urlencoded
     elif 'json' in mime_type:
         response = requests.post(url=address,
-                                 json=data,
+                                 json=json,
+                                 data=data,
                                  headers=headers,
                                  timeout=timeout,
                                  files=files,
@@ -60,6 +63,7 @@ def post(headers, address, mime_type, timeout=10, data=None, files=None, cookies
         log.debug('默认的表单方式')
         response = requests.post(url=address,
                                  data=data,
+                                 json=json,
                                  headers=headers,
                                  timeout=timeout,
                                  files=files,

@@ -1,5 +1,8 @@
+import json
+
 import os
 import sys
+import random
 from utils.readYaml import read_yaml_data
 # 项目根目录
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -14,3 +17,10 @@ DB_CONFIG = os.path.join(BASE_DIR, 'config/dbConfig.yaml')
 RC = read_yaml_data(RUN_CONFIG)
 INTERVAL = RC['interval']
 PROJECT_NAME = RC['project_name']
+
+# 虚假请求头
+FAKE_HEADERS = random.choice(json.loads(open(os.path.join(BASE_DIR, 'config/fakeHeaders.json'), 'r').read())['Headers'])
+
+
+if __name__ == '__main__':
+    print(FAKE_HEADERS)

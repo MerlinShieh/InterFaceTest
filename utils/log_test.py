@@ -14,7 +14,6 @@ print(BASE_DIR)
 class LogHandler(object):
 
     def __init__(self, log_name='ApiTest', debug=True, log_level="DEBUG"):
-
         self.console = None
         self.logger = None
         self.debug = debug
@@ -46,8 +45,6 @@ class LogHandler(object):
         self.logger.addHandler(file_handler)
 
         return self.logger
-
-
 
 
 if __name__ == "__main__":

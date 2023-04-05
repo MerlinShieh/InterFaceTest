@@ -1,0 +1,58 @@
+- feature: HTTP 方法
+  story: GET方式
+  title: GET使用Query参数
+  request:
+    method: get
+    url: https://echo.apifox.com
+    path: /get
+    headers:  null
+    mime_type: null
+    json: null
+    data: null
+    params: q1=参数一&q2=参数二
+    file: null
+    cookies: null
+    timeout: 1
+  validate: null
+
+- feature: HTTP 方法
+  story: POST方式
+  title: POST使用json参数
+  request:
+    method: post
+    url: https://echo.apifox.com
+    path: /post
+    headers:
+      Content-Type: application/json
+    mime_type: application/json
+    json:
+      username: PostMethod
+      passwd: json
+    data: null
+    params: null
+    file: null
+    cookies: null
+    timeout: 1
+  validate: null
+
+
+
+- feature: HTTP 方法
+  story: POST方式
+  title: POST使用json参数
+  request:
+    method: post
+    url: https://echo.apifox.com
+    path: /post
+    headers:
+      Content-Type: application/json
+    mime_type: application/json
+    json:
+      username: PostMethod
+      passwd: json
+    data: null
+    params: null
+    file: null
+    cookies: null
+    timeout: 1
+  validate: null
