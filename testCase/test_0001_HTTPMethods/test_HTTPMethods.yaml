@@ -10,10 +10,10 @@
     json: null
     data: null
     params: q1=参数一&q2=参数二
-    file: null
+    file: ${(__file__)}
     cookies: null
     timeout: 1
-  validate: null
+  validate: ${TOKEN}
 
 - feature: HTTP 方法
   story: POST方式
@@ -33,7 +33,7 @@
     file: null
     cookies: null
     timeout: 1
-  validate: null
+  validate: ${TOKEN}
 
 
 
