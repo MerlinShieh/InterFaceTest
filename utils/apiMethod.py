@@ -77,7 +77,7 @@ def post(headers, address, mime_type, timeout=10, json=None, data=None, files=No
                                  verify=False)
     try:
         if response.status_code != 200:
-            log.warning('Code Not 200')
+            log.warning('Code IsNot 200')
             log.warning(f'{response.status_code}  {response.text}')
             return response.status_code, response.text
         else:
