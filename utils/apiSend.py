@@ -9,6 +9,9 @@ from config import INTERVAL, FAKE_HEADERS
 from utils import log, logger, BASE_DIR
 from utils import apiMethod
 import urllib3
+
+from utils.readYaml import read_yaml_data
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -120,10 +123,9 @@ def send_request(case_data, test_info=None):
 
 
 if __name__ == '__main__':
-    import readFile
     import os
-
-    yaml_f = readFile.readYaml(os.path.join(BASE_DIR, 'testCase', 'test_0001_HTTPMethods', 'test_HTTPMethods.yaml'))
+    #
+    yaml_f = read_yaml_data(os.path.join(BASE_DIR, 'testCase', 'test_0001_HTTPMethods', 'test_HTTPMethods.yaml'))
     for case_data in yaml_f:
         log.debug(case_data['request'])
         resp = send_request(case_data)
