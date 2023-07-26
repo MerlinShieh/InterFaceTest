@@ -18,7 +18,7 @@ if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
     print(LOG_DIR, '路径已存在')
     file_stream = True
-LOG_DIR = os.path.join(LOG_DIR, 'ApiTest_{time}.log')
+LOG_DIR = os.path.join(LOG_DIR, 'VOD_{time}.log')
 log.add(LOG_DIR, rotation='50 MB', level="DEBUG")
 
 
