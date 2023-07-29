@@ -10,7 +10,10 @@ from utils import log, logger, BASE_DIR
 from utils import apiMethod
 import urllib3
 
-from utils.readYaml import read_yaml_data
+# from utils.readYaml import read_yaml_data
+# 废弃
+
+from utils.readWriteYmal import read_yaml_data
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -45,25 +48,29 @@ def send_request(case_data, test_info=None):
         raise KeyError('获取用例基本信息失败：{}'.format(e))
 
     request_url = _url + _path
-    log.info("=" * 150)
+    log.info("\n\n" + "=" * 150 + "\n")
 
     # 判断接口请求类型
-    result = {"code": None, "data": f"{_method} Method error"}
+    result = {"code": 403, "data": f"{_method}", "msg": "Method error"}
     if _method == 'POST':
         log.info("请求方法: POST")
         # 判断是否上传文件
         if _file:
-            # with allure.step("POST上传文件"):
-            #     allure.attach(name="请求接口", body=str(summary))
-            #     allure.attach(name="请求地址", body=request_url)
-            #     allure.attach(name="请求头", body=str(headers))
-            #     allure.attach(name="请求参数", body=str(parameter))
-            # result = apiMethod.post(headers=headers,
-            #                         address=request_url,
-            #                         mime_type=mime_type,
-            #                         files=parameter,
-            #                         cookies=cookies,
-            #                         timeout=timeout)
+            log.info("\n***********\n"
+                     "*\n"
+                     "* 当前上传文件: {}\n"
+                     "*\n"
+                     "***********\n", _file)
+
+            result = apiMethod.post(headers=_headers,
+                                    address=request_url,
+                                    mime_type=_mime_type,
+                                    data=_data,
+                                    json=_json,
+                                    file=_file,
+                                    cookies=_cookies,
+                                    timeout=_timeout)
+
             ...
         else:
             result = apiMethod.post(headers=_headers,
@@ -82,31 +89,7 @@ def send_request(case_data, test_info=None):
                                timeout=_timeout)
     elif _method == 'PUT':
         log.info("请求方法: PUT")
-        # 判断是否上传文件
-        # if _file:
-        #     # with allure.step("PUT上传文件"):
-        #     #     allure.attach(name="请求接口", body=str(summary))
-        #     #     allure.attach(name="请求地址", body=request_url)
-        #     #     allure.attach(name="请求头", body=str(headers))
-        #     #     allure.attach(name="请求参数", body=str(parameter))
-        #     result = apiMethod.put(headers=headers,
-        #                            address=request_url,
-        #                            mime_type=_mini_type,
-        #                            files=parameter,
-        #                            cookies=cookies,
-        #                            timeout=timeout)
-        # else:
-        #     # with allure.step("PUT请求接口"):
-        #     #     allure.attach(name="请求接口", body=str(summary))
-        #     #     allure.attach(name="请求地址", body=request_url)
-        #     #     allure.attach(name="请求头", body=str(headers))
-        #     #     allure.attach(name="请求参数", body=str(parameter))
-        #     result = apiMethod.put(headers=headers,
-        #                            address=request_url,
-        #                            mime_type=_mini_type,
-        #                            data=parameter,
-        #                            cookies=cookies,
-        #                            timeout=timeout)
+
     elif _method == 'DELETE':
         log.info("请求方法: DELETE")
         result = apiMethod.delete(headers=_headers,
@@ -124,7 +107,7 @@ def send_request(case_data, test_info=None):
 
 if __name__ == '__main__':
     import os
-    #
+    TOKEN = 123123
     yaml_f = read_yaml_data(os.path.join(BASE_DIR, 'testCase', 'test_0001_HTTPMethods', 'test_HTTPMethods.yaml'))
     for case_data in yaml_f:
         log.debug(case_data['request'])
