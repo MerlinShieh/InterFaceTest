@@ -10,10 +10,12 @@
     json: null
     data: null
     params: q1=参数一&q2=参数二
-    file: ${(__file__)}
+    file:  null
     cookies: null
     timeout: 1
-  validate: ${TOKEN}
+  validate:
+    - equals: {status_code: 200}
+    - equals: {code: '200'}
 
 - feature: HTTP 方法
   story: POST方式
@@ -33,7 +35,8 @@
     file: null
     cookies: null
     timeout: 1
-  validate: ${TOKEN}
+  validate:
+    - equals: {status_code: 200}
 
 
 
@@ -55,4 +58,5 @@
     file: null
     cookies: null
     timeout: 1
-  validate: null
+  validate:
+    - equals: {status_code: 200}
